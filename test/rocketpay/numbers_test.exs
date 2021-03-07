@@ -20,5 +20,4 @@ defmodule Rocketpay.NumbersTest do
       assert response == expected_response
     end
   end
-
 end

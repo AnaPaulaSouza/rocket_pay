@@ -3,7 +3,7 @@ defmodule RocketpayWeb.WelcomeController do
 
   alias Rocketpay.Numbers
 
-  def index(conn, %{"filename" => filename} ) do
+  def index(conn, %{"filename" => filename}) do
     filename
     |> Numbers.sum_from_file()
     |> handle_response(conn)
@@ -12,12 +12,13 @@ defmodule RocketpayWeb.WelcomeController do
   defp handle_response({:ok, %{result: result}}, conn) do
     conn
     |> put_status(:ok)
-    |> json(%{message: "Welcome to Rocketpay API. Here is your number #{result}"})
+    |> json(%{message: "Welcome to Rocketpay API, Here is your number #{result}"})
   end
 
-  defp handle_response({:error, reason}, conn) do
+  defp handle_response({:error, result}, conn) do
     conn
     |> put_status(:bad_request)
-    |> json({reason})
+    |> put_view(Rocketpay.ErrorView)
+    |> render("400.json", result: result)
   end
 end

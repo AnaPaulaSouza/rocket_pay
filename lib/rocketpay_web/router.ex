@@ -5,10 +5,19 @@ defmodule RocketpayWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", RocketpayWeb do
+  scope "/", RocketpayWeb do
     pipe_through :api
 
     get "/:filename", WelcomeController, :index
+    post "/users", UsersController, :create
+  end
+
+  scope "/api", RocketpayWeb do
+    pipe_through [:api, :auth]
+
+    post "/accounts/:id/deposit", AccountsController, :deposit
+    post "/accounts/:id/withdraw", AccountsController, :withdraw
+    post "/accounts/transaction", AccountsController, :transaction
   end
 
   if Mix.env() in [:dev, :test] do
